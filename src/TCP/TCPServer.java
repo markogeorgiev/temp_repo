@@ -3,8 +3,6 @@
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.sql.SQLOutput;
-import java.util.Scanner;
 
 public class TCPServer extends Thread{
     private int port;
@@ -67,29 +65,30 @@ class WorkerThread extends Thread {
     @Override
     public void run() {
         String receivedLine = null;
+        int temp = socket.getPort();
         try {
-            while (!(receivedLine = reader.readLine()).isEmpty()){
+            while (!((receivedLine = reader.readLine()) == null)){
                 TCPServer.NUM_MESSAGES++;
                 System.out.printf("%d. From %s: %s\n",TCPServer.NUM_MESSAGES, socket.getInetAddress(), receivedLine);
                 writer.write(String.format("Message '%s' received\n", receivedLine));
                 writer.flush();
             }
 
-        } catch (IOException e) {
-            System.out.printf("Client at port '%d', has left the chat!", socket.getPort());
+        } catch (IOException ignored) {
+
         } finally {
             if (socket != null){
                 try {
                     socket.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
+                } catch (IOException ignored) {
+
                 }
             }
             if (reader != null){
                 try {
                     reader.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
+                } catch (IOException ignored) {
+
                 }
             }
             if (writer != null){
@@ -100,5 +99,6 @@ class WorkerThread extends Thread {
                 }
             }
         }
+        System.out.printf("Client at port '%d', has left the chat!\n", temp);
     }
 }
