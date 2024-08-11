@@ -1,4 +1,4 @@
-package TCP;
+//package TCP;
 
 import java.io.*;
 import java.net.ServerSocket;
@@ -74,10 +74,9 @@ class WorkerThread extends Thread {
                 writer.write(String.format("Message '%s' received\n", receivedLine));
                 writer.flush();
             }
-            socket.close();
 
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.printf("Client at port '%d', has left the chat!", socket.getPort());
         } finally {
             if (socket != null){
                 try {
